@@ -1,0 +1,22 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "backend": "nodemon src/index.js",
+    "Frontend": "npm start --prefix Frontend",
+    "both": "concurrently \"npm run Frontend\" \"npm run Frontend\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-router": "^0.0.1",
+    "mongoose": "^7.0.3",
+    "validator": "^13.9.0"
+  }
+}
