@@ -7,6 +7,9 @@ const regData = require("../model/regConn")
 router.get("", (req, res) => {
     res.send("hello this is the express home page ")
 })
+router.get("/contact", (req, res) => {
+    res.send(" this is the contact page ")
+})
 
 router.post("/clientdata", async (req, res) => {
     // console.log(req.body)
