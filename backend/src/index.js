@@ -2,7 +2,7 @@ const express = require('express')
 require('dotenv').config()
 require("./db/conn")
 const clientRouter = require("./routers/clientData")
-const cors = require("cors");
+// const cors = require("cors");
 
 
 
@@ -10,7 +10,7 @@ const app = express()
 const PORT = process.env.PORT || 7000
 app.use(express.json())
 app.use(clientRouter)
-app.use(cors());
+// app.use(cors());
 
 
 
