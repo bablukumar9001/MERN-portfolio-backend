@@ -10,7 +10,7 @@ const app = express()
 const PORT = process.env.PORT || 7000
 app.use(express.json())
 app.use(clientRouter)
-const cors = require('cors');
+// const cors = require('cors');
 const corsOpts = {
     origin: '*',
     credentials: true,
