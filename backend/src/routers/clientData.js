@@ -12,6 +12,9 @@ router.get("/contact", (req, res) => {
 })
 
 router.post("/clientdata", async (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*")
+    res.setHeader("'Access-Control-Allow-Credentials', true")
+
     // console.log(req.body)
     const { name, mobile, email, subject, message } = req.body
 
