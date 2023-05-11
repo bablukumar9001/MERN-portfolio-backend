@@ -10,12 +10,15 @@ const app = express()
 const PORT = process.env.PORT || 7000
 app.use(express.json())
 app.use(clientRouter)
-// // const cors = require('cors');
-// const corsOpts = {
-//     origin: 'https://bablukumar.onrender.com/',
-//     credentials: true,
-// };
-// app.use(cors(corsOpts));
+// const cors = require('cors');
+const corsOpts = {
+    origin: 'https://bablukumar.onrender.com/',
+    credentials: true,
+    allowedHeaders: "*",
+    allowMethods: "*",
+
+};
+app.use(cors(corsOpts));
 
 
 app.listen(PORT, () => {
