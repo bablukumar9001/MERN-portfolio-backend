@@ -12,12 +12,14 @@ app.use(express.json())
 app.use(clientRouter)
 
 
-const cors = require('cors');
-const corsOpts = {
-    origin: '*',
-    credentials: true,
-};
-app.use(cors(corsOpts));
+// const cors = require('cors');
+// const corsOpts = {
+
+// };
+app.use(cors({
+    origin: 'https://bablukumar.onrender.com/',
+    credentials: true
+}));
 
 
 app.listen(PORT, () => {
