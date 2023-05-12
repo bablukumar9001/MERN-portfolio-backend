@@ -2,7 +2,7 @@ const express = require('express')
 require('dotenv').config()
 require("./db/conn")
 const clientRouter = require("./routers/clientData")
-// const cors = require("cors");
+const cors = require("cors");
 
 
 
