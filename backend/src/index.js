@@ -14,8 +14,8 @@ app.use(clientRouter)
 
 const cors = require('cors');
 const corsOpts = {
-    origin: 'https://bablukumar.onrender.com/',
-    // credentials: true,
+    origin: '*',
+    credentials: true,
 };
 app.use(cors(corsOpts));
 
