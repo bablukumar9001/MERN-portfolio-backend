@@ -17,7 +17,7 @@ app.use(clientRouter)
 
 // };
 app.use(cors({
-    origin: 'https://bablukumar.onrender.com/',
+    origin: '*',
     credentials: true
 }));
 
