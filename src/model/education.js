@@ -7,7 +7,7 @@ const educationSchema = new mongoose.Schema(
     year: { type: String, default: "" },
     description: { type: String, default: "" },
     icon: { type: String, default: "fas fa-graduation-cap" },
-    color: { type: String, default: "#ff014f" },
+    color: { type: String, default: "#4f46e5" },
     order: { type: Number, default: 0 },
   },
   { timestamps: true }

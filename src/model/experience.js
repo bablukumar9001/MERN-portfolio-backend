@@ -7,7 +7,7 @@ const experienceSchema = new mongoose.Schema(
     position: { type: String, required: true },
     duration: { type: String, required: true },
     location: { type: String, default: "" },
-    color: { type: String, default: "#ff014f" },
+    color: { type: String, default: "#4f46e5" },
     icon: { type: String, default: "fas fa-briefcase" },
     achievements: { type: [String], default: [] },
     order: { type: Number, default: 0 },

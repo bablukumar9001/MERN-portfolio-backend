@@ -10,7 +10,7 @@ const sendContactEmail = async ({ name, mobile, email, subject, message }) => {
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-      <h2 style="color: #ff014f;">New Portfolio Contact</h2>
+      <h2 style="color: #4f46e5;">New Portfolio Contact</h2>
       <table style="width: 100%; border-collapse: collapse;">
         <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Name</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(name)}</td></tr>
         <tr><td style="padding: 8px; border-bottom: 1px solid #eee;"><strong>Mobile</strong></td><td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(String(mobile))}</td></tr>
