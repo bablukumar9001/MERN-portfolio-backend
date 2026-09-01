@@ -11,6 +11,7 @@ const Service = require("../model/service");
 const SiteContent = require("../model/siteContent");
 const Image = require("../model/image");
 const sendReplyEmail = require("../utils/sendReplyEmail");
+const { deleteImageByRef, cleanupReplacedImage } = require("../utils/imageCleanup");
 
 const router = express.Router();
 
@@ -188,11 +189,13 @@ router.post("/projects", authAdmin, async (req, res) => {
 
 router.put("/projects/:id", authAdmin, async (req, res) => {
   try {
+    const prev = await Project.findById(req.params.id);
+    if (!prev) return res.status(404).json({ error: "Not found" });
     const item = await Project.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
-    if (!item) return res.status(404).json({ error: "Not found" });
+    await cleanupReplacedImage(prev.src, item.src);
     res.json(item);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -200,7 +203,8 @@ router.put("/projects/:id", authAdmin, async (req, res) => {
 });
 
 router.delete("/projects/:id", authAdmin, async (req, res) => {
-  await Project.findByIdAndDelete(req.params.id);
+  const item = await Project.findByIdAndDelete(req.params.id);
+  if (item) await deleteImageByRef(item.src);
   res.json({ success: true });
 });
 
@@ -221,11 +225,13 @@ router.post("/experiences", authAdmin, async (req, res) => {
 
 router.put("/experiences/:id", authAdmin, async (req, res) => {
   try {
+    const prev = await Experience.findById(req.params.id);
+    if (!prev) return res.status(404).json({ error: "Not found" });
     const item = await Experience.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
-    if (!item) return res.status(404).json({ error: "Not found" });
+    await cleanupReplacedImage(prev.companyLogo, item.companyLogo);
     res.json(item);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -233,7 +239,8 @@ router.put("/experiences/:id", authAdmin, async (req, res) => {
 });
 
 router.delete("/experiences/:id", authAdmin, async (req, res) => {
-  await Experience.findByIdAndDelete(req.params.id);
+  const item = await Experience.findByIdAndDelete(req.params.id);
+  if (item) await deleteImageByRef(item.companyLogo);
   res.json({ success: true });
 });
 
@@ -254,11 +261,13 @@ router.post("/skills", authAdmin, async (req, res) => {
 
 router.put("/skills/:id", authAdmin, async (req, res) => {
   try {
+    const prev = await Skill.findById(req.params.id);
+    if (!prev) return res.status(404).json({ error: "Not found" });
     const item = await Skill.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
-    if (!item) return res.status(404).json({ error: "Not found" });
+    await cleanupReplacedImage(prev.image, item.image);
     res.json(item);
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -266,7 +275,8 @@ router.put("/skills/:id", authAdmin, async (req, res) => {
 });
 
 router.delete("/skills/:id", authAdmin, async (req, res) => {
-  await Skill.findByIdAndDelete(req.params.id);
+  const item = await Skill.findByIdAndDelete(req.params.id);
+  if (item) await deleteImageByRef(item.image);
   res.json({ success: true });
 });
 
@@ -391,6 +401,36 @@ router.post("/upload", authAdmin, async (req, res) => {
     });
 
     res.status(201).json({ url: `/api/images/${img._id}` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.delete("/images/:id", authAdmin, async (req, res) => {
+  await Image.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
+
+// Sweep uploaded images no collection references any more.
+router.post("/images/cleanup", authAdmin, async (req, res) => {
+  try {
+    const referenced = new Set();
+    const collect = (docs, field) =>
+      docs.forEach((d) => {
+        const m = /\/api\/images\/([a-f0-9]{24})/i.exec(d[field] || "");
+        if (m) referenced.add(m[1]);
+      });
+
+    collect(await Project.find({}, "src"), "src");
+    collect(await Skill.find({}, "image"), "image");
+    collect(await Experience.find({}, "companyLogo"), "companyLogo");
+
+    const all = await Image.find({}, "_id");
+    const orphans = all.filter((img) => !referenced.has(String(img._id)));
+    if (orphans.length) {
+      await Image.deleteMany({ _id: { $in: orphans.map((o) => o._id) } });
+    }
+    res.json({ deleted: orphans.length });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
