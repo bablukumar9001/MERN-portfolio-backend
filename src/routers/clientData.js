@@ -16,15 +16,17 @@ router.get("", (req, res) => {
 });
 
 router.post("/clientdata", contactLimiter, async (req, res) => {
-  const { name, mobile, email, subject, message, website } = req.body;
+  const { name, email, message, website } = req.body;
+  const mobile = req.body.mobile || "";
+  const subject = req.body.subject || "General inquiry";
 
   // Honeypot: real users never fill the hidden "website" field; bots do.
   if (website) {
     return res.status(200).json({ success: true });
   }
 
-  if (!name || !mobile || !email || !subject || !message) {
-    return res.status(422).json({ error: "plz fill the fields properly" });
+  if (!name || !email || !message) {
+    return res.status(422).json({ error: "Please fill in your name, email and message." });
   }
 
   try {

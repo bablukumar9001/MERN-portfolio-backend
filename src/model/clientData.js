@@ -8,7 +8,7 @@ const contactSchema = new mongoose.Schema({
   },
   mobile: {
     type: String,
-    required: true,
+    default: "",
     trim: true,
   },
   email: {
@@ -16,13 +16,13 @@ const contactSchema = new mongoose.Schema({
     required: true,
     validate(value) {
       if (!validator.isEmail(value)) {
-        throw new Error("Email is Required");
+        throw new Error("A valid email is required");
       }
     },
   },
   subject: {
     type: String,
-    required: true,
+    default: "General inquiry",
   },
   message: {
     type: String,
