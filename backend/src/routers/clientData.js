@@ -1,101 +1,35 @@
-const express = require("express")
-const router = new express.Router()
-const cData = require("../model/clientData")
-const regData = require("../model/regConn")
-
+const express = require("express");
+const router = new express.Router();
+const cData = require("../model/clientData");
+const sendContactEmail = require("../utils/sendContactEmail");
 
 router.get("", (req, res) => {
-    res.send("hello this is the express home page ")
-})
-router.get("/contact", (req, res) => {
-    res.send(" this is the contact page ")
-})
+  res.send("hello this is the express home page ");
+});
 
 router.post("/clientdata", async (req, res) => {
-    // res.setHeader("Access-Control-Allow-Origin", "*")
-    // res.setHeader('Access-Control-Allow-Credentials', true)
+  const { name, mobile, email, subject, message } = req.body;
 
-    // console.log(req.body)
-    const { name, mobile, email, subject, message } = req.body
+  if (!name || !mobile || !email || !subject || !message) {
+    return res.status(422).json({ error: "plz fill the fields properly" });
+  }
 
-    if (!name || !mobile || !email || !subject || !message) {
-        return res.status(422).json({ error: "plz fill the fields properly" })
-    }
+  try {
+    const user = new cData({ name, mobile, email, subject, message });
+    const createUser = await user.save();
+
+    // Soft-fail: DB save succeeded even if email fails
     try {
-
-
-        const user = new cData({ name, mobile, email, subject, message })
-        const createUser = await user.save()
-        res.send(createUser)
-
-    }
-    catch (e) {
-        console.log(e)
-        return res.sendStatus(400).send(e)
+      await sendContactEmail({ name, mobile, email, subject, message });
+    } catch (mailErr) {
+      console.error("Contact email failed:", mailErr.message);
     }
 
-})
+    res.status(201).json(createUser);
+  } catch (e) {
+    console.log(e);
+    return res.status(400).json({ error: e.message || "Bad request" });
+  }
+});
 
-router.post("/register", async (req, res) => {
-
-    const { name, number, email, password, cPassword } = req.body
-
-    if (!name || !number || !email || !password || !cPassword) {
-        // console.log(req.body)
-        return res.status(422).json({ error: "plz fill the fields properly" })
-    }
-    try {
-
-        if (password === cPassword) {
-            const user = new regData({ name, number, email, password, cPassword })
-
-            const registered = await user.save()
-            console.log("the success part 2" + registered)
-            res.send(registered)
-
-        }
-        else {
-            res.send("password are not matching")
-        }
-    }
-
-
-    catch (err) {
-        console.log(err)
-    }
-
-}
-)
-
-router.post("/login", async (req, res) => {
-
-    const { email, password } = req.body
-    if (!email || !password) {
-        return res.status(422).json({ error: "plz fill the fields properly" })
-    }
-
-    try {
-
-        const useremail = await regData.findOne({ email: email })
-        const userpassword = useremail.password
-
-
-        if (password === userpassword) {
-
-            return res.status(201).json({ success: "login successfully" })
-
-        }
-        else {
-            return res.status(422).json({ error: "invalid details" })
-
-
-
-        }
-
-    } catch (error) {
-        console.log(error)
-    }
-
-})
-
-module.exports = router
+module.exports = router;

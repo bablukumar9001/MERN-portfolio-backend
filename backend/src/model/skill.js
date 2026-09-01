@@ -1,0 +1,17 @@
+const mongoose = require("mongoose");
+
+const skillSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    image: { type: String, default: "" },
+    category: {
+      type: String,
+      enum: ["Languages and Databases", "Libraries and Frameworks", "Tools & Technologies"],
+      required: true,
+    },
+    order: { type: Number, default: 0 },
+  },
+  { timestamps: true }
+);
+
+module.exports = mongoose.model("Skill", skillSchema);
