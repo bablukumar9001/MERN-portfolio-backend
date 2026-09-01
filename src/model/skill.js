@@ -6,7 +6,14 @@ const skillSchema = new mongoose.Schema(
     image: { type: String, default: "" },
     category: {
       type: String,
-      enum: ["Languages and Databases", "Libraries and Frameworks", "Tools & Technologies"],
+      enum: [
+        "Languages",
+        "Frontend",
+        "Backend",
+        "Databases",
+        "DevOps & Cloud",
+        "Integrations & Tools",
+      ],
       required: true,
     },
     order: { type: Number, default: 0 },

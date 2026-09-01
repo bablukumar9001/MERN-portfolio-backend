@@ -1,5 +1,5 @@
 /**
- * One-time seed: pushes the current hard-coded portfolio content into MongoDB
+ * One-time seed: pushes the current portfolio content into MongoDB
  * so every section becomes editable from the admin panel.
  *
  * Usage:  npm run seed        (from the backend/ folder)
@@ -22,187 +22,246 @@ const DB = process.env.MONGODB_URI || process.env.DATABASE;
 const FORCE = process.env.SEED_FORCE === "1";
 
 // ————————————————————————————————————————————————————————————
-// Data (mirrors the frontend fallbacks as of the last manual edit)
+// Data (mirrors the frontend fallbacks — keep the two in sync)
 // ————————————————————————————————————————————————————————————
 
 const projects = [
   {
+    title: "VittaGems – Enterprise Web3 Jewellery Platform",
+    description:
+      "An enterprise Web3-based jewellery platform built on a microservices architecture. Independent Auth, User, Admin, Gateway, KYC and Token services communicate through secure REST APIs with JWT authentication, role-based access control and Swagger documentation. The Next.js frontend integrates payments, media uploads and real-time features, with the whole system containerised and deployed to AWS.",
+    tools:
+      "Next.js, React.js, TypeScript, Node.js, Express.js, MongoDB, Microservices, JWT, RBAC, Razorpay, Cloudinary, Multer, Nodemailer, Socket.IO, Cron, Docker, Docker Compose, PM2, Nginx, AWS EC2, Swagger",
+    accomplishments: [
+      "Built full-stack modules for a Web3 jewellery platform with Next.js, TypeScript, Node.js, Express.js and MongoDB",
+      "Designed Auth, User, Admin, Gateway, KYC and Token microservices with secure REST APIs, JWT, RBAC and Swagger",
+      "Integrated Razorpay, Cloudinary, Multer, Nodemailer, Socket.IO and Cron-based background jobs",
+      "Deployed and maintained services using Docker, Docker Compose, PM2, Nginx and AWS EC2",
+    ],
+    liveLink: "",
+    sourceLink: "",
+    src: "",
+    order: 1,
+  },
+  {
+    title: "Launchly – Multi-Chain Web3 Launchpad",
+    description:
+      "A scalable, multi-chain Web3 launchpad that lets creators launch and manage projects across chains. Built with a microservices backend and a responsive Next.js dashboard covering creator workflows, chat and platform administration, deployed and monitored in production.",
+    tools:
+      "Next.js, React.js, TypeScript, Node.js, Express.js, MongoDB, Microservices, JWT, RBAC, Socket.IO, Docker, PM2, Nginx, AWS EC2",
+    accomplishments: [
+      "Developed scalable full-stack modules for a multi-chain Web3 launchpad with Next.js, TypeScript, Node.js and MongoDB",
+      "Built secure REST APIs, authentication and RBAC, integrating multiple microservices for platform functionality",
+      "Built responsive dashboards and backend services for creator workflows, chat and platform features",
+      "Managed deployments and production support with Docker, PM2, Nginx and AWS EC2",
+    ],
+    liveLink: "",
+    sourceLink: "",
+    src: "",
+    order: 2,
+  },
+  {
     title: "Licious – Online Meat Delivery Platform",
     description:
-      "A full-featured online meat delivery platform inspired by Licious, built using Next.js and the MERN ecosystem. The application offers a smooth and modern shopping experience with category-based browsing, product filtering, cart & checkout flow, and secure authentication. The platform is fully responsive, optimized for SEO, and delivers high-performance user interactions using server components and API routes from Next.js.",
+      "A responsive, SEO-friendly online meat delivery experience built with Next.js (SSR/SSG) and React.js. Includes a product catalog with search, cart and order management backed by REST APIs, and a reusable component architecture tuned for performance.",
     tools:
-      "Next.js, React.js, Node.js, Express.js, MongoDB, Redux Toolkit, Tailwind CSS, Material UI, JWT, REST APIs",
+      "Next.js, React.js, Node.js, Express.js, MongoDB, REST APIs, Tailwind CSS",
     accomplishments: [
-      "Modern homepage with banners, curated meat categories, and featured products",
-      "Implemented secure user authentication & authorization using JWT",
-      "Built product listing pages with category filters (Chicken, Mutton, Fish, Eggs, etc.)",
-      "Developed detailed product pages with weight options, pricing, and nutritional info",
-      "Added robust cart functionality with quantity updates and dynamic pricing",
-      "Created a checkout flow with address input, delivery options, and payment simulation",
-      "Developed an Admin Panel to manage products, categories, and orders",
-      "Built using Next.js App Router, Server Components, API Routes, and optimized rendering",
-      "Responsive and mobile-friendly UI inspired by Licious (Tailwind CSS + Material UI)",
-      "Improved SEO using Next.js metadata, image optimization, and pre-rendering techniques",
+      "Developed responsive and SEO-friendly pages with Next.js (SSR/SSG) and React.js",
+      "Built and integrated REST APIs for product catalog, search, cart and order management",
+      "Improved performance through lazy loading, image optimization and reusable components",
+      "Collaborated with backend teams to deliver scalable, production-ready features",
     ],
     liveLink: "https://www.licious.in/",
     sourceLink: "",
     src: "/images/licious.png",
-    order: 1,
+    order: 3,
   },
   {
-    title: "ShopKart",
+    title: "ShopKart – E-Commerce Platform (MERN)",
     description:
-      "ShopKart is a fully functional MERN stack-based e-commerce platform designed to deliver a seamless online shopping experience. It includes secure authentication, product management, payment integration, and an admin dashboard for efficient store management. With a modern UI built using Tailwind CSS and Material UI, the platform ensures a smooth and responsive user experience.",
+      "A full-stack e-commerce platform with authentication, product management, cart, orders, payments and an admin dashboard. Secure REST APIs with JWT and role-based access control, Redux Toolkit state management, and third-party integrations for payments, uploads and email.",
     tools:
-      "React, Bootstrap, JavaScript, HTML, CSS ,Node.js, Express, MongoDB, tailwind css, material ui",
+      "React.js, Redux Toolkit, Material UI, Node.js, Express.js, MongoDB, JWT, RBAC, Razorpay, Cloudinary, Multer, Nodemailer",
     accomplishments: [
-      "User Authentication & Authorization (JWT-based login, signup, and secure access)",
-      "Password Reset with email link for account recovery",
-      "Admin Dashboard for managing products, users, and orders",
-      "Product Listings with advanced filtering and sorting",
-      "Shopping Cart for easy order management",
-      "Secure Payment Integration with Stripe/Razorpay",
-      "Product Reviews & Ratings to enhance customer engagement",
-      "Fully Responsive UI with Tailwind CSS & Material UI",
-      "SEO-Optimized structure for better search visibility",
+      "Built a full-stack e-commerce platform with auth, product management, cart, orders, payments and an admin dashboard",
+      "Developed secure REST APIs with Node.js, Express.js, MongoDB, JWT authentication and role-based access control",
+      "Integrated Razorpay, Cloudinary, Multer and Nodemailer for payments, file uploads and email notifications",
+      "Optimized performance with Redux Toolkit, lazy loading, reusable components and responsive UI",
     ],
     liveLink: "https://shopkart-epla.onrender.com/",
     sourceLink: "https://github.com/bablukumar9001/ShopKart",
     src: "/images/shopkart.png",
-    order: 2,
+    order: 4,
   },
   {
     title: "My Portfolio",
     description:
-      "This MERN stack-based portfolio website serves as a digital resume and professional showcase. It highlights personal information, skills, education, projects, and experience in an interactive and visually appealing manner. The platform is designed to be fully responsive, ensuring a seamless user experience across all devices.",
-    tools: "React, Node.js, Express, MongoDB, JavaScript, HTML, CSS",
+      "This MERN portfolio doubles as a live CMS: every section — projects, skills, experience, education, services and site content — is editable from a JWT-protected admin panel, with image uploads and an email-reply inbox for contact messages. Fully responsive with dark/light themes.",
+    tools: "React, Node.js, Express, MongoDB, JavaScript, JWT, Vite",
     accomplishments: [
-      "About Me Section displaying professional summary, expertise, and contact details",
-      "Projects Showcase with live project links and descriptions",
-      "dark and light theme",
-      "Skills & Tech Stack highlighting frontend, backend, and database expertise",
-      "Education & Experience section detailing academic and professional journey",
-      "Resume Download option for recruiters to access an up-to-date resume",
-      "Contact Form enabling easy communication via email integration",
-      "Responsive Design optimized for desktops, tablets, and mobile devices",
-      "SEO Optimized for better search visibility and reach",
+      "Admin panel with full CRUD for every portfolio section plus a Site Content editor",
+      "Image uploads stored in MongoDB with automatic cleanup of unused images",
+      "Contact form with spam protection; reply to messages by email from the dashboard",
+      "Dark and light theme, resume download, and API-driven content with safe fallbacks",
+      "Responsive design optimized for desktop, tablet and mobile",
     ],
     liveLink: "https://bablukumar.onrender.com/",
     sourceLink: "https://github.com/bablukumar9001/MERN-portfolio-frontend",
     src: "/images/portfolio.png",
-    order: 3,
+    order: 5,
   },
   {
     title: "Veavix",
     description:
-      "Veavix is a professional business website designed to showcase company services, improve online presence, and enhance user engagement. Built with the MERN stack, the platform delivers a modern, responsive, and seamless user experience.",
-    tools: "React, Bootstrap, JavaScript, HTML, CSS ,Node.js, Express, MongoDB ",
+      "A responsive IT-services website with dynamic content sections and REST APIs for managing service pages and contact forms, built with the MERN stack and optimised for performance and SEO.",
+    tools: "React, Bootstrap, JavaScript, Node.js, Express, MongoDB",
     accomplishments: [
-      "Responsive UI/UX: Clean and intuitive interface optimized for all devices.",
-      "Service Showcase: Detailed sections highlighting company services and offerings",
-      "Dynamic Content Management: Easily updateable service and portfolio sections.",
-      "Contact & Inquiry Forms: Secure forms for customer inquiries with backend email integration.",
-      "SEO Optimization: Well-structured meta tags and content for better search visibility.",
-      "Fast Performance: Optimized for speed using caching and efficient API calls.",
+      "Developed a responsive IT-services website with dynamic, updateable content sections",
+      "Built REST APIs for managing service pages and contact forms with email integration",
+      "Optimised performance and SEO with meta tags, React optimisation and clean UI components",
     ],
     liveLink: "https://veavix.onrender.com/",
     sourceLink: "https://github.com/bablukumar9001/Veavix-frontend",
     src: "/images/veavix.png",
-    order: 4,
+    order: 6,
   },
 ];
 
 const skills = [
-  // Languages and Databases
-  { name: "Javascript", image: "/images/javascript.png", category: "Languages and Databases", order: 1 },
-  { name: "Typescript", image: "/images/typescript.png", category: "Languages and Databases", order: 2 },
-  { name: "PHP", image: "/images/php.png", category: "Languages and Databases", order: 3 },
-  { name: "HTML5", image: "/images/html5-300x300.jpg", category: "Languages and Databases", order: 4 },
-  { name: "MySQL", image: "/images/mysql-logo-1-300x300.jpg", category: "Languages and Databases", order: 5 },
-  { name: "MongoDB", image: "/images/mongodb.png", category: "Languages and Databases", order: 6 },
-  // Libraries and Frameworks
-  { name: "React Js", image: "/images/react.png", category: "Libraries and Frameworks", order: 1 },
-  { name: "Next Js", image: "/images/nextjs.png", category: "Libraries and Frameworks", order: 2 },
-  { name: "Express Js", image: "/images/express.png", category: "Libraries and Frameworks", order: 3 },
-  { name: "Node Js", image: "/images/node.png", category: "Libraries and Frameworks", order: 4 },
-  { name: "Laravel", image: "/images/laravel.png", category: "Libraries and Frameworks", order: 5 },
-  { name: "CSS3", image: "/images/css3-300x300.jpg", category: "Libraries and Frameworks", order: 6 },
-  { name: "Bootstrap", image: "/images/bootstrap.png", category: "Libraries and Frameworks", order: 7 },
-  { name: "Tailwind", image: "/images/tailwind.png", category: "Libraries and Frameworks", order: 8 },
-  { name: "Material UI", image: "/images/materialui.png", category: "Libraries and Frameworks", order: 9 },
-  // Tools & Technologies
-  { name: "Git", image: "/images/git.png", category: "Tools & Technologies", order: 1 },
-  { name: "Postman", image: "/images/postman.png", category: "Tools & Technologies", order: 2 },
-  { name: "API's", image: "/images/api.png", category: "Tools & Technologies", order: 3 },
-  { name: "aws", image: "/images/aws.png", category: "Tools & Technologies", order: 4 },
-  { name: "docker", image: "/images/docker.png", category: "Tools & Technologies", order: 5 },
+  // Languages
+  { name: "JavaScript (ES6+)", image: "/images/javascript.png", category: "Languages", order: 1 },
+  { name: "TypeScript", image: "/images/typescript.png", category: "Languages", order: 2 },
+  { name: "PHP", image: "/images/php.png", category: "Languages", order: 3 },
+  { name: "HTML5", image: "/images/html5-300x300.jpg", category: "Languages", order: 4 },
+  { name: "CSS3", image: "/images/css3-300x300.jpg", category: "Languages", order: 5 },
+
+  // Frontend
+  { name: "React.js", image: "/images/react.png", category: "Frontend", order: 1 },
+  { name: "Next.js", image: "/images/nextjs.png", category: "Frontend", order: 2 },
+  { name: "Redux Toolkit", image: "/images/redux.png", category: "Frontend", order: 3 },
+  { name: "React Query", image: "", category: "Frontend", order: 4 },
+  { name: "Tailwind CSS", image: "/images/tailwind.png", category: "Frontend", order: 5 },
+  { name: "Material UI", image: "/images/materialui.png", category: "Frontend", order: 6 },
+  { name: "Bootstrap", image: "/images/bootstrap.png", category: "Frontend", order: 7 },
+
+  // Backend
+  { name: "Node.js", image: "/images/node.png", category: "Backend", order: 1 },
+  { name: "Express.js", image: "/images/express.png", category: "Backend", order: 2 },
+  { name: "REST APIs", image: "/images/api.png", category: "Backend", order: 3 },
+  { name: "JWT", image: "", category: "Backend", order: 4 },
+  { name: "OAuth", image: "", category: "Backend", order: 5 },
+  { name: "Socket.IO", image: "", category: "Backend", order: 6 },
+  { name: "Microservices", image: "", category: "Backend", order: 7 },
+  { name: "Laravel", image: "/images/laravel.png", category: "Backend", order: 8 },
+
+  // Databases
+  { name: "MongoDB", image: "/images/mongodb.png", category: "Databases", order: 1 },
+  { name: "Mongoose", image: "", category: "Databases", order: 2 },
+  { name: "MySQL", image: "/images/mysql-logo-1-300x300.jpg", category: "Databases", order: 3 },
+  { name: "Redis", image: "", category: "Databases", order: 4 },
+
+  // DevOps & Cloud
+  { name: "Docker", image: "/images/docker.png", category: "DevOps & Cloud", order: 1 },
+  { name: "Docker Compose", image: "", category: "DevOps & Cloud", order: 2 },
+  { name: "AWS (EC2, S3)", image: "/images/aws.png", category: "DevOps & Cloud", order: 3 },
+  { name: "CI/CD", image: "", category: "DevOps & Cloud", order: 4 },
+  { name: "GitHub Actions", image: "", category: "DevOps & Cloud", order: 5 },
+  { name: "PM2", image: "", category: "DevOps & Cloud", order: 6 },
+  { name: "Nginx", image: "", category: "DevOps & Cloud", order: 7 },
+
+  // Integrations & Tools
+  { name: "Razorpay", image: "", category: "Integrations & Tools", order: 1 },
+  { name: "Cloudinary", image: "", category: "Integrations & Tools", order: 2 },
+  { name: "Nodemailer", image: "", category: "Integrations & Tools", order: 3 },
+  { name: "Swagger", image: "", category: "Integrations & Tools", order: 4 },
+  { name: "Git", image: "/images/git.png", category: "Integrations & Tools", order: 5 },
+  { name: "Postman", image: "/images/postman.png", category: "Integrations & Tools", order: 6 },
+  { name: "Jest", image: "", category: "Integrations & Tools", order: 7 },
+  { name: "Azure DevOps", image: "", category: "Integrations & Tools", order: 8 },
 ];
 
 const experiences = [
   {
+    companyLogo: "",
+    companyName: "Flexsin Technologies",
+    position: "Software Engineer",
+    duration: "Mar 2026 - Jul 2026",
+    location: "Noida, India",
+    color: "#00b359",
+    icon: "fas fa-code",
+    achievements: [
+      "Developed enterprise-grade full-stack applications using Next.js, React.js, TypeScript, Node.js, Express.js, MongoDB and a microservices architecture",
+      "Built and maintained Auth, User, Admin, Gateway, KYC and Token services with secure REST APIs, JWT authentication, RBAC and Swagger documentation",
+      "Built a responsive Next.js frontend and integrated Razorpay, Cloudinary, Multer and Nodemailer, with Socket.IO for real-time features",
+      "Automated background tasks with Cron jobs, optimised MongoDB queries and resolved production issues to improve performance",
+      "Deployed and maintained applications with Docker, Docker Compose, PM2, Nginx and AWS EC2, working in an Agile team",
+    ],
+    order: 1,
+  },
+  {
     companyLogo: "/images/brancosoft.png",
     companyName: "Brancosoft Pvt. Ltd.",
-    position: "Full Stack Developer",
-    duration: "Sep 2023 - Present",
+    position: "MERN Stack Developer",
+    duration: "Sep 2023 - Sep 2025",
     location: "Noida, India",
     color: "#ff014f",
     icon: "fas fa-briefcase",
     achievements: [
-      "Experienced in building high-performance, SEO-friendly applications using Next.js with SSR, SSG, Server Actions, and the App Router.",
-      "Developed high-performance backend systems using Node.js and Express, delivering secure and scalable RESTful APIs.",
-      "Improved integration with third-party services to create smoother and more seamless user experiences.",
-      "Built scalable server-side solutions to enhance performance, reliability, and application efficiency.",
-      "Contributed to front-end development using React.js by implementing reusable components and improving overall UI/UX.",
-      "Converted design mockups into responsive, interactive, and visually appealing interfaces using modern frontend technologies.",
+      "Developed scalable MERN stack and Next.js applications focused on performance, maintainability and responsive UX",
+      "Built and integrated secure REST APIs with Node.js, Express.js and MongoDB, with JWT authentication and role-based access control",
+      "Developed SEO-friendly applications with Next.js (SSR/SSG) and optimised frontend performance via lazy loading and code splitting",
+      "Improved database performance with MongoDB indexing, aggregation pipelines and query optimisation",
+      "Collaborated in an Agile team on feature development, code reviews, bug fixing and production releases",
     ],
-    order: 1,
+    order: 2,
   },
   {
     companyLogo: "/images/drpu.jpg",
     companyName: "DRPU Software Pvt. Ltd.",
     position: "Frontend Developer",
-    duration: "March 2023 - Aug 2023",
+    duration: "Mar 2023 - Aug 2023",
     location: "Noida, India",
     color: "#4d79ff",
     icon: "fas fa-laptop-code",
     achievements: [
-      "Developed responsive web interfaces with HTML, CSS, and JavaScript",
-      "Enhanced user experience across devices with mobile-first approach",
-      "Collaborated with design teams to implement visually appealing layouts",
-      "Applied HTML for structure, CSS for styling, and JavaScript for interactivity",
-      "Employed front-end best practices, ensuring optimized code for consistent design",
+      "Developed responsive, cross-browser interfaces with HTML5, CSS3, JavaScript, React.js and Bootstrap",
+      "Built reusable UI components and integrated REST APIs for dynamic, interactive web applications",
+      "Improved performance with lazy loading, code splitting and frontend optimisation, significantly raising Lighthouse scores",
+      "Contributed to Next.js projects implementing SSR/SSG and SEO best practices",
+      "Worked closely with designers and backend developers to ship pixel-perfect UIs within Agile cycles",
     ],
-    order: 2,
+    order: 3,
   },
 ];
 
 const education = [
   {
-    degree: "Masters in Computer and Application (MCA)",
-    institution: "AKTU University",
+    degree: "Master of Computer Applications (MCA)",
+    institution: "Dr. A.P.J. Abdul Kalam Technical University (AKTU)",
     year: "2021 - 2023",
     description:
-      "Focused on software development, web technologies, and database management. Developed multiple projects using React.js and Node.js.",
+      "Focused on software development, web technologies and database management. Built multiple projects using React.js and Node.js.",
     icon: "fas fa-graduation-cap",
     color: "#ff014f",
     order: 1,
   },
   {
-    degree: "Bachelor in Computer and Application (BCA)",
-    institution: "ABC Technical Institute",
+    degree: "Bachelor of Computer Applications (BCA)",
+    institution: "Chaudhary Charan Singh University (CCSU)",
     year: "2018 - 2021",
     description:
-      "Specialized in web development using MERN stack and PHP Laravel. Completed various projects including personal portfolio websites and e-commerce platforms.",
+      "Specialised in web development with the MERN stack and PHP Laravel. Completed projects including portfolio websites and e-commerce platforms.",
     icon: "fas fa-university",
     color: "#4d79ff",
     order: 2,
   },
   {
     degree: "Intermediate (12th)",
-    institution: "SBN public school (CBSE)",
+    institution: "SBN Public School (CBSE)",
     year: "2016 - 2018",
     description:
-      "Completed higher secondary education with focus on computer science and mathematics.",
+      "Completed higher secondary education with a focus on computer science and mathematics.",
     icon: "fas fa-school",
     color: "#00b359",
     order: 3,
@@ -214,43 +273,57 @@ const services = [
     icon: "FaCode",
     title: "Full-Stack Web Development",
     description:
-      "Building scalable web applications using the MERN stack (MongoDB, Express.js, React.js, Node.js). Expertise in both front-end and back-end development for seamless user experiences.",
+      "Building scalable web applications with the MERN stack and Next.js (SSR/SSG/ISR). End-to-end delivery from database design to a polished, responsive UI.",
     order: 1,
+  },
+  {
+    icon: "FaCubes",
+    title: "Microservices Architecture",
+    description:
+      "Designing and building service-based backends — Auth, Gateway, KYC and domain services — with secure REST APIs, JWT/RBAC and Swagger documentation.",
+    order: 2,
+  },
+  {
+    icon: "FaEthereum",
+    title: "Web3 Application Development",
+    description:
+      "Full-stack Web3 platforms and launchpads: wallet flows, multi-chain support, token and KYC services, and responsive Next.js dashboards.",
+    order: 3,
   },
   {
     icon: "FaReact",
     title: "Frontend Development",
     description:
-      "Creating responsive and dynamic user interfaces with React.js. Specializing in modern UI/UX design principles for engaging and accessible web applications.",
-    order: 2,
-  },
-  {
-    icon: "FaDatabase",
-    title: "Backend Development",
-    description:
-      "Developing robust server-side applications using Node.js and Express.js. Experience with RESTful APIs, database integration, and authentication systems.",
-    order: 3,
-  },
-  {
-    icon: "FaMobileAlt",
-    title: "Responsive Design",
-    description:
-      "Designing websites that are mobile-friendly and responsive. Ensuring that web applications perform flawlessly across all devices, from desktops to smartphones.",
+      "Responsive, dynamic interfaces with React.js and Next.js, Redux Toolkit / React Query state management and modern, accessible UI/UX.",
     order: 4,
   },
   {
-    icon: "FaLaptopCode",
-    title: "Custom Web Application Development",
+    icon: "FaDatabase",
+    title: "Backend & API Development",
     description:
-      "Designing and developing tailored web applications using both MERN and PHP Laravel. Providing solutions that meet specific business needs with scalability and performance in mind.",
+      "Robust Node.js/Express services, RESTful APIs, authentication (JWT/OAuth), MongoDB aggregation pipelines and query optimisation.",
     order: 5,
   },
   {
-    icon: "FaNetworkWired",
-    title: "API Development & Integration",
+    icon: "FaCreditCard",
+    title: "Payment & Third-Party Integration",
     description:
-      "Building and integrating RESTful APIs using Node.js/Express.js and PHP Laravel for seamless communication between client and server. Expertise in third-party API integration for enhanced functionality.",
+      "Razorpay payments, Cloudinary media, Nodemailer email, Socket.IO real-time and Cron background jobs, wired cleanly into your app.",
     order: 6,
+  },
+  {
+    icon: "FaCloud",
+    title: "DevOps & Cloud Deployment",
+    description:
+      "Containerising and shipping apps with Docker, Docker Compose, PM2, Nginx and AWS EC2, with CI/CD via GitHub Actions.",
+    order: 7,
+  },
+  {
+    icon: "FaMobileAlt",
+    title: "Responsive Design & Performance",
+    description:
+      "Mobile-first, cross-browser UIs tuned with lazy loading, code splitting, caching and image optimisation for strong Lighthouse scores.",
+    order: 8,
   },
 ];
 
@@ -260,21 +333,21 @@ const siteContent = {
     "https://drive.google.com/file/d/15aOdmnAreAGIj3IoGbr2knPda-UNOxM-/view?usp=sharing",
   heroGreeting: "WELCOME TO MY WORLD",
   heroName: "Bablu kumar",
-  heroLocation: "based in India",
+  heroLocation: "based in Ghaziabad, India",
   heroRoles: [
-    "Web Developer",
-    "React Developer",
+    "Software Engineer",
     "Full Stack Developer",
     "MERN Developer",
+    "Next.js Developer",
   ],
   aboutBio:
-    "I'm Bablu Kumar, a dedicated MERN stack developer from India. I specialize in merging logic with creativity to deliver intuitive, accessible, and visually appealing web experiences. My work ranges from small business websites to sophisticated, feature-rich web applications. I'm eager to bring my skills to a dynamic team where I can continue to grow and make an impact.",
-  aboutYears: "2+",
+    "I'm Bablu Kumar, a Full Stack Developer with 3+ years of experience building scalable web applications with Next.js, React.js, TypeScript, Node.js, Express.js and MongoDB. I design RESTful APIs and microservices-based architectures, and work across authentication, payment integration, real-time communication, cloud deployments and performance optimization. I'm skilled with Docker, AWS EC2, PM2, Nginx, Swagger and CI/CD, with hands-on experience delivering enterprise production applications.",
+  aboutYears: "3+",
   contactEmail: "bablukumar09001@gmail.com",
   contactPhone: "+91 8920549001",
-  contactLocation: "Noida, UP, India",
+  contactLocation: "Lal Kuan, Ghaziabad, Uttar Pradesh, India",
   footerText:
-    "I'm a passionate full-stack developer specializing in creating modern, responsive web applications using the MERN stack and other cutting-edge technologies.",
+    "Full stack developer building scalable, production-grade web applications with Next.js, the MERN stack and microservices architecture.",
   social: {
     instagram: "https://www.instagram.com/abhay__9001/",
     facebook: "https://www.facebook.com/abhay559722/",
