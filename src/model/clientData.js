@@ -32,6 +32,12 @@ const contactSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  replies: [
+    {
+      body: { type: String, required: true },
+      sentAt: { type: Date, default: Date.now },
+    },
+  ],
   date: {
     type: Date,
     default: Date.now,

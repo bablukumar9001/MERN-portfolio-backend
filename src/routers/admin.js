@@ -9,6 +9,8 @@ const Skill = require("../model/skill");
 const Education = require("../model/education");
 const Service = require("../model/service");
 const SiteContent = require("../model/siteContent");
+const Image = require("../model/image");
+const sendReplyEmail = require("../utils/sendReplyEmail");
 
 const router = express.Router();
 
@@ -138,6 +140,34 @@ router.delete("/messages/:id", authAdmin, async (req, res) => {
     res.json({ success: true });
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+// Reply to a message — email goes out from your portfolio Gmail (EMAIL_USER)
+router.post("/messages/:id/reply", authAdmin, async (req, res) => {
+  try {
+    const body = (req.body.body || "").trim();
+    if (!body) return res.status(422).json({ error: "Reply body is required" });
+
+    const msg = await Contact.findById(req.params.id);
+    if (!msg) return res.status(404).json({ error: "Not found" });
+
+    await sendReplyEmail({
+      to: msg.email,
+      name: msg.name,
+      subject: msg.subject,
+      body,
+      originalMessage: msg.message,
+    });
+
+    msg.replies.push({ body });
+    msg.read = true;
+    await msg.save();
+
+    res.json(msg);
+  } catch (err) {
+    console.error("Reply failed:", err.message);
+    res.status(500).json({ error: err.message || "Failed to send reply" });
   }
 });
 
@@ -330,6 +360,39 @@ router.put("/site-content", authAdmin, async (req, res) => {
     res.json(doc);
   } catch (err) {
     res.status(400).json({ error: err.message });
+  }
+});
+
+// ——— Image upload (base64 data URL -> stored in Mongo) ———
+const MAX_IMAGE_BYTES = 3 * 1024 * 1024; // 3 MB
+const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif", "image/svg+xml"];
+
+router.post("/upload", authAdmin, async (req, res) => {
+  try {
+    const { dataUrl, filename } = req.body;
+    const match = /^data:([a-zA-Z0-9/+.-]+);base64,(.+)$/s.exec(dataUrl || "");
+    if (!match) return res.status(422).json({ error: "Invalid image data" });
+
+    const contentType = match[1];
+    if (!ALLOWED_TYPES.includes(contentType)) {
+      return res.status(422).json({ error: "Unsupported image type" });
+    }
+
+    const buffer = Buffer.from(match[2], "base64");
+    if (buffer.length > MAX_IMAGE_BYTES) {
+      return res.status(413).json({ error: "Image too large (max 3 MB)" });
+    }
+
+    const img = await Image.create({
+      data: buffer,
+      contentType,
+      filename: filename || "",
+      size: buffer.length,
+    });
+
+    res.status(201).json({ url: `/api/images/${img._id}` });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 });
 

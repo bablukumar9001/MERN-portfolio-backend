@@ -9,6 +9,7 @@ const Skill = require("./model/skill");
 const Education = require("./model/education");
 const Service = require("./model/service");
 const SiteContent = require("./model/siteContent");
+const Image = require("./model/image");
 const cors = require("cors");
 
 const app = express();
@@ -22,10 +23,23 @@ app.use(
     credentials: true,
   })
 );
-app.use(express.json());
+app.use(express.json({ limit: "6mb" })); // room for base64 image uploads
 
 app.use(clientRouter);
 app.use("/api/admin", adminRouter);
+
+// Public: serve an uploaded image by id
+app.get("/api/images/:id", async (req, res) => {
+  try {
+    const img = await Image.findById(req.params.id);
+    if (!img) return res.status(404).end();
+    res.set("Content-Type", img.contentType);
+    res.set("Cache-Control", "public, max-age=31536000, immutable");
+    res.send(img.data);
+  } catch (err) {
+    res.status(400).end();
+  }
+});
 
 // Public read APIs (portfolio content — fallback on frontend if empty)
 app.get("/api/projects", async (req, res) => {

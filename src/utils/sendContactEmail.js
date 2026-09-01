@@ -1,19 +1,12 @@
-const nodemailer = require("nodemailer");
+const { getTransporter, escapeHtml } = require("./mailer");
 
 const sendContactEmail = async ({ name, mobile, email, subject, message }) => {
-  const { EMAIL_USER, EMAIL_PASS, EMAIL_TO } = process.env;
-
-  if (!EMAIL_USER || !EMAIL_PASS || !EMAIL_TO) {
-    throw new Error("Email env vars missing (EMAIL_USER, EMAIL_PASS, EMAIL_TO)");
+  const { EMAIL_USER, EMAIL_TO } = process.env;
+  if (!EMAIL_TO) {
+    throw new Error("Email env var missing (EMAIL_TO)");
   }
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: EMAIL_USER,
-      pass: EMAIL_PASS,
-    },
-  });
+  const transporter = getTransporter();
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -37,13 +30,5 @@ const sendContactEmail = async ({ name, mobile, email, subject, message }) => {
     html,
   });
 };
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
-}
 
 module.exports = sendContactEmail;
