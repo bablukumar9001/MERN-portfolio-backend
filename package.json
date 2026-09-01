@@ -1,14 +1,12 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Portfolio backend API (Express + MongoDB)",
+  "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
-    "backend": "nodemon src/index.js",
-    "Frontend": "npm start --prefix Frontend",
-    "dev": "concurrently \"npm run backend\" \"npm run Frontend\""
+    "dev": "nodemon src/index.js",
+    "seed": "node src/scripts/seed.js"
   },
   "author": "",
   "license": "ISC",

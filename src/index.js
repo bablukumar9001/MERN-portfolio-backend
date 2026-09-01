@@ -6,6 +6,9 @@ const adminRouter = require("./routers/admin");
 const Project = require("./model/project");
 const Experience = require("./model/experience");
 const Skill = require("./model/skill");
+const Education = require("./model/education");
+const Service = require("./model/service");
+const SiteContent = require("./model/siteContent");
 const cors = require("cors");
 
 const app = express();
@@ -47,6 +50,33 @@ app.get("/api/skills", async (req, res) => {
   try {
     const items = await Skill.find().sort({ order: 1, createdAt: -1 });
     res.json(items);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/education", async (req, res) => {
+  try {
+    const items = await Education.find().sort({ order: 1, createdAt: -1 });
+    res.json(items);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/services", async (req, res) => {
+  try {
+    const items = await Service.find().sort({ order: 1, createdAt: -1 });
+    res.json(items);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/site-content", async (req, res) => {
+  try {
+    const doc = await SiteContent.findOne({ key: "main" });
+    res.json(doc || {});
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

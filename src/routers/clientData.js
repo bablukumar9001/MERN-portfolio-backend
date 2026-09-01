@@ -2,13 +2,26 @@ const express = require("express");
 const router = new express.Router();
 const cData = require("../model/clientData");
 const sendContactEmail = require("../utils/sendContactEmail");
+const createRateLimiter = require("../middleware/rateLimit");
+
+// Max 3 contact submissions per IP per 10 minutes.
+const contactLimiter = createRateLimiter({
+  windowMs: 10 * 60 * 1000,
+  max: 3,
+  message: "Too many messages sent. Please try again in a few minutes.",
+});
 
 router.get("", (req, res) => {
   res.send("hello this is the express home page ");
 });
 
-router.post("/clientdata", async (req, res) => {
-  const { name, mobile, email, subject, message } = req.body;
+router.post("/clientdata", contactLimiter, async (req, res) => {
+  const { name, mobile, email, subject, message, website } = req.body;
+
+  // Honeypot: real users never fill the hidden "website" field; bots do.
+  if (website) {
+    return res.status(200).json({ success: true });
+  }
 
   if (!name || !mobile || !email || !subject || !message) {
     return res.status(422).json({ error: "plz fill the fields properly" });

@@ -6,6 +6,9 @@ const Contact = require("../model/clientData");
 const Project = require("../model/project");
 const Experience = require("../model/experience");
 const Skill = require("../model/skill");
+const Education = require("../model/education");
+const Service = require("../model/service");
+const SiteContent = require("../model/siteContent");
 
 const router = express.Router();
 
@@ -58,14 +61,23 @@ router.get("/me", authAdmin, (req, res) => {
 // ——— Dashboard stats ———
 router.get("/stats", authAdmin, async (req, res) => {
   try {
-    const [totalMessages, unreadMessages, projects, experiences, skills] =
-      await Promise.all([
-        Contact.countDocuments(),
-        Contact.countDocuments({ read: false }),
-        Project.countDocuments(),
-        Experience.countDocuments(),
-        Skill.countDocuments(),
-      ]);
+    const [
+      totalMessages,
+      unreadMessages,
+      projects,
+      experiences,
+      skills,
+      education,
+      services,
+    ] = await Promise.all([
+      Contact.countDocuments(),
+      Contact.countDocuments({ read: false }),
+      Project.countDocuments(),
+      Experience.countDocuments(),
+      Skill.countDocuments(),
+      Education.countDocuments(),
+      Service.countDocuments(),
+    ]);
 
     const latest = await Contact.find().sort({ date: -1 }).limit(5);
 
@@ -75,6 +87,8 @@ router.get("/stats", authAdmin, async (req, res) => {
       projects,
       experiences,
       skills,
+      education,
+      services,
       latest,
     });
   } catch (err) {
@@ -224,6 +238,99 @@ router.put("/skills/:id", authAdmin, async (req, res) => {
 router.delete("/skills/:id", authAdmin, async (req, res) => {
   await Skill.findByIdAndDelete(req.params.id);
   res.json({ success: true });
+});
+
+// ——— Education CRUD ———
+router.get("/education", authAdmin, async (req, res) => {
+  const items = await Education.find().sort({ order: 1, createdAt: -1 });
+  res.json(items);
+});
+
+router.post("/education", authAdmin, async (req, res) => {
+  try {
+    const item = await Education.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.put("/education/:id", authAdmin, async (req, res) => {
+  try {
+    const item = await Education.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!item) return res.status(404).json({ error: "Not found" });
+    res.json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.delete("/education/:id", authAdmin, async (req, res) => {
+  await Education.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
+
+// ——— Services CRUD ———
+router.get("/services", authAdmin, async (req, res) => {
+  const items = await Service.find().sort({ order: 1, createdAt: -1 });
+  res.json(items);
+});
+
+router.post("/services", authAdmin, async (req, res) => {
+  try {
+    const item = await Service.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.put("/services/:id", authAdmin, async (req, res) => {
+  try {
+    const item = await Service.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!item) return res.status(404).json({ error: "Not found" });
+    res.json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.delete("/services/:id", authAdmin, async (req, res) => {
+  await Service.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
+});
+
+// ——— Site Content (single document) ———
+router.get("/site-content", authAdmin, async (req, res) => {
+  try {
+    let doc = await SiteContent.findOne({ key: "main" });
+    if (!doc) doc = await SiteContent.create({ key: "main" });
+    res.json(doc);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.put("/site-content", authAdmin, async (req, res) => {
+  try {
+    const payload = { ...req.body };
+    delete payload._id;
+    delete payload.key;
+    const doc = await SiteContent.findOneAndUpdate(
+      { key: "main" },
+      { $set: payload },
+      { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
+    );
+    res.json(doc);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
 
 module.exports = router;
