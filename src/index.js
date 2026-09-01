@@ -10,7 +10,10 @@ const Education = require("./model/education");
 const Service = require("./model/service");
 const SiteContent = require("./model/siteContent");
 const Image = require("./model/image");
+const Certification = require("./model/certification");
+const AnalyticsEvent = require("./model/analyticsEvent");
 const cors = require("cors");
+const createRateLimiter = require("./middleware/rateLimit");
 
 const app = express();
 const PORT = process.env.PORT || 7000;
@@ -93,6 +96,39 @@ app.get("/api/site-content", async (req, res) => {
     res.json(doc || {});
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/certifications", async (req, res) => {
+  try {
+    const items = await Certification.find().sort({ order: 1, createdAt: -1 });
+    res.json(items);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Cookie-less analytics beacon. Increments a daily counter, no PII stored.
+const trackLimiter = createRateLimiter({
+  windowMs: 60 * 1000,
+  max: 20,
+  message: "Too many requests",
+});
+app.post("/api/track", trackLimiter, async (req, res) => {
+  try {
+    const type = req.query.type || (req.body && req.body.type);
+    if (!["visit", "cv_download"].includes(type)) {
+      return res.status(422).json({ error: "bad type" });
+    }
+    const day = new Date().toISOString().slice(0, 10);
+    await AnalyticsEvent.findOneAndUpdate(
+      { day, type },
+      { $inc: { count: 1 } },
+      { upsert: true }
+    );
+    res.status(204).end();
+  } catch (err) {
+    res.status(204).end(); // never break the page over analytics
   }
 });
 

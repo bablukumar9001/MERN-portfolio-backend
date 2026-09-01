@@ -6,6 +6,7 @@ const projectSchema = new mongoose.Schema(
     description: { type: String, required: true },
     tools: { type: String, default: "" },
     accomplishments: { type: [String], default: [] },
+    tags: { type: [String], default: [] },
     liveLink: { type: String, default: "" },
     sourceLink: { type: String, default: "" },
     src: { type: String, default: "" },

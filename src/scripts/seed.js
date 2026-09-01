@@ -357,9 +357,26 @@ const siteContent = {
   },
 };
 
+// Tags per project (drives the filter chips on the Projects section)
+const PROJECT_TAGS = {
+  "VittaGems – Enterprise Web3 Jewellery Platform": ["Web3", "Microservices", "Full-Stack"],
+  "Launchly – Multi-Chain Web3 Launchpad": ["Web3", "Microservices", "Full-Stack"],
+  "Licious – Online Meat Delivery Platform": ["Next.js", "Full-Stack"],
+  "ShopKart – E-Commerce Platform (MERN)": ["E-Commerce", "Full-Stack"],
+  "My Portfolio": ["Full-Stack", "MERN"],
+  Veavix: ["Full-Stack", "Business"],
+};
+projects.forEach((p) => {
+  p.tags = PROJECT_TAGS[p.title] || [];
+});
+
 // ————————————————————————————————————————————————————————————
 
 async function seedCollection(name, Model, docs) {
+  if (!docs.length) {
+    console.log(`• ${name}: skipped (nothing to seed)`);
+    return;
+  }
   const count = await Model.countDocuments();
   if (count > 0 && !FORCE) {
     console.log(`• ${name}: skipped (${count} docs already present)`);
