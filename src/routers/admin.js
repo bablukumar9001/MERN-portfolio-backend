@@ -11,6 +11,7 @@ const Service = require("../model/service");
 const SiteContent = require("../model/siteContent");
 const Image = require("../model/image");
 const Certification = require("../model/certification");
+const Testimonial = require("../model/testimonial");
 const AdminUser = require("../model/adminUser");
 const AnalyticsEvent = require("../model/analyticsEvent");
 const sendReplyEmail = require("../utils/sendReplyEmail");
@@ -111,6 +112,7 @@ router.get("/stats", authAdmin, async (req, res) => {
       education,
       services,
       certifications,
+      testimonials,
     ] = await Promise.all([
       Contact.countDocuments(),
       Contact.countDocuments({ read: false }),
@@ -120,6 +122,7 @@ router.get("/stats", authAdmin, async (req, res) => {
       Education.countDocuments(),
       Service.countDocuments(),
       Certification.countDocuments(),
+      Testimonial.countDocuments(),
     ]);
 
     const latest = await Contact.find().sort({ date: -1 }).limit(5);
@@ -133,6 +136,7 @@ router.get("/stats", authAdmin, async (req, res) => {
       education,
       services,
       certifications,
+      testimonials,
       latest,
     });
   } catch (err) {
@@ -403,35 +407,46 @@ router.put("/site-content", authAdmin, async (req, res) => {
     const payload = { ...req.body };
     delete payload._id;
     delete payload.key;
+    const prev = await SiteContent.findOne({ key: "main" });
     const doc = await SiteContent.findOneAndUpdate(
       { key: "main" },
       { $set: payload },
       { new: true, upsert: true, runValidators: true, setDefaultsOnInsert: true }
     );
+    if (prev) await cleanupReplacedImage(prev.resumeUrl, doc.resumeUrl);
     res.json(doc);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
 });
 
-// ——— Image upload (base64 data URL -> stored in Mongo) ———
+// ——— File upload (base64 data URL -> stored in Mongo) ———
 const MAX_IMAGE_BYTES = 3 * 1024 * 1024; // 3 MB
-const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif", "image/svg+xml"];
+const MAX_FILE_BYTES = 5 * 1024 * 1024; // 5 MB for resume/docs
+const IMAGE_TYPES = ["image/png", "image/jpeg", "image/webp", "image/gif", "image/svg+xml"];
+const FILE_TYPES = [
+  "application/pdf",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+];
+const ALLOWED_TYPES = [...IMAGE_TYPES, ...FILE_TYPES];
 
 router.post("/upload", authAdmin, async (req, res) => {
   try {
     const { dataUrl, filename } = req.body;
     const match = /^data:([a-zA-Z0-9/+.-]+);base64,(.+)$/s.exec(dataUrl || "");
-    if (!match) return res.status(422).json({ error: "Invalid image data" });
+    if (!match) return res.status(422).json({ error: "Invalid file data" });
 
     const contentType = match[1];
     if (!ALLOWED_TYPES.includes(contentType)) {
-      return res.status(422).json({ error: "Unsupported image type" });
+      return res.status(422).json({ error: "Unsupported file type" });
     }
 
     const buffer = Buffer.from(match[2], "base64");
-    if (buffer.length > MAX_IMAGE_BYTES) {
-      return res.status(413).json({ error: "Image too large (max 3 MB)" });
+    const maxBytes = FILE_TYPES.includes(contentType) ? MAX_FILE_BYTES : MAX_IMAGE_BYTES;
+    if (buffer.length > maxBytes) {
+      const label = FILE_TYPES.includes(contentType) ? "File" : "Image";
+      const mb = maxBytes / (1024 * 1024);
+      return res.status(413).json({ error: `${label} too large (max ${mb} MB)` });
     }
 
     const img = await Image.create({
@@ -466,6 +481,8 @@ router.post("/images/cleanup", authAdmin, async (req, res) => {
     collect(await Skill.find({}, "image"), "image");
     collect(await Experience.find({}, "companyLogo"), "companyLogo");
     collect(await Certification.find({}, "image"), "image");
+    collect(await Testimonial.find({}, "avatar"), "avatar");
+    collect(await SiteContent.find({}, "resumeUrl"), "resumeUrl");
 
     const all = await Image.find({}, "_id");
     const orphans = all.filter((img) => !referenced.has(String(img._id)));
@@ -514,6 +531,42 @@ router.delete("/certifications/:id", authAdmin, async (req, res) => {
   res.json({ success: true });
 });
 
+// ——— Testimonials CRUD ———
+router.get("/testimonials", authAdmin, async (req, res) => {
+  const items = await Testimonial.find().sort({ order: 1, createdAt: -1 });
+  res.json(items);
+});
+
+router.post("/testimonials", authAdmin, async (req, res) => {
+  try {
+    const item = await Testimonial.create(req.body);
+    res.status(201).json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.put("/testimonials/:id", authAdmin, async (req, res) => {
+  try {
+    const prev = await Testimonial.findById(req.params.id);
+    if (!prev) return res.status(404).json({ error: "Not found" });
+    const item = await Testimonial.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    await cleanupReplacedImage(prev.avatar, item.avatar);
+    res.json(item);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.delete("/testimonials/:id", authAdmin, async (req, res) => {
+  const item = await Testimonial.findByIdAndDelete(req.params.id);
+  if (item) await deleteImageByRef(item.avatar);
+  res.json({ success: true });
+});
+
 // ——— Generic reorder ———
 const REORDERABLE = {
   projects: Project,
@@ -522,6 +575,7 @@ const REORDERABLE = {
   education: Education,
   services: Service,
   certifications: Certification,
+  testimonials: Testimonial,
 };
 
 router.patch("/:resource/reorder", authAdmin, async (req, res) => {

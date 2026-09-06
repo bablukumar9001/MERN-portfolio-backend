@@ -10,6 +10,11 @@ const projectSchema = new mongoose.Schema(
     liveLink: { type: String, default: "" },
     sourceLink: { type: String, default: "" },
     src: { type: String, default: "" },
+    problem: { type: String, default: "" },
+    solution: { type: String, default: "" },
+    metrics: { type: String, default: "" },
+    myRole: { type: String, default: "" },
+    featured: { type: Boolean, default: false },
     order: { type: Number, default: 0 },
   },
   { timestamps: true }

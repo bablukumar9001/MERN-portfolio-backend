@@ -5,6 +5,8 @@ const serviceSchema = new mongoose.Schema(
     title: { type: String, required: true },
     description: { type: String, default: "" },
     icon: { type: String, default: "FaCode" },
+    deliverables: { type: [String], default: [] },
+    engagement: { type: String, default: "" },
     order: { type: Number, default: 0 },
   },
   { timestamps: true }

@@ -17,6 +17,7 @@ const Experience = require("../model/experience");
 const Education = require("../model/education");
 const Service = require("../model/service");
 const SiteContent = require("../model/siteContent");
+const Testimonial = require("../model/testimonial");
 
 const DB = process.env.MONGODB_URI || process.env.DATABASE;
 const FORCE = process.env.SEED_FORCE === "1";
@@ -41,6 +42,14 @@ const projects = [
     liveLink: "",
     sourceLink: "",
     src: "",
+    problem:
+      "Enterprise jewellery brands needed a secure Web3 platform with KYC, payments and real-time inventory — without compromising compliance or UX.",
+    solution:
+      "Microservices architecture with dedicated Auth, KYC, Gateway and Token services; Next.js dashboard with Razorpay, Cloudinary and Socket.IO for live updates.",
+    metrics:
+      "6 microservices deployed on AWS · JWT + RBAC across all APIs · Production-ready Docker/PM2/Nginx stack",
+    myRole: "Full Stack Developer — frontend modules, API integration, deployment & production support",
+    featured: true,
     order: 1,
   },
   {
@@ -58,7 +67,75 @@ const projects = [
     liveLink: "",
     sourceLink: "",
     src: "",
+    problem:
+      "Creators needed a unified multi-chain launchpad with secure onboarding, KYC and real-time collaboration — without sacrificing scalability.",
+    solution:
+      "Microservices backend with JWT/RBAC, responsive Next.js creator dashboard and Socket.IO chat; containerised and deployed on AWS with PM2/Nginx.",
+    metrics:
+      "Multi-chain launch workflows · Real-time creator chat · Production deployment on AWS EC2",
+    myRole: "Full Stack Developer — backend microservices, Next.js dashboards, deployment & production support",
     order: 2,
+  },
+  {
+    title: "JonaCart – Personalised Gifting Store (Next.js)",
+    description:
+      "A full-stack personalised gifting store — personalised gifts, festive hampers and lifestyle products — built with Next.js (App Router, Server Components) and PostgreSQL via Prisma. Catalog with category and search filters, product pages with personalisation details, wishlist, reviews and ratings, coupons, and Razorpay/COD checkout, plus a full admin dashboard.",
+    tools:
+      "Next.js, React.js, TypeScript, Prisma, PostgreSQL, iron-session, Razorpay, Nodemailer, Sonner, REST APIs",
+    accomplishments: [
+      "Built a full-stack gifting store with Next.js App Router, Server Components and a Prisma/PostgreSQL backend",
+      "Implemented OTP email verification, forgot/reset password and iron-session authentication",
+      "Added wishlist, product reviews and ratings, coupon codes and an admin-managed homepage banner",
+      "Integrated Razorpay and COD checkout with order-confirmation emails via Nodemailer",
+      "Built an admin dashboard with CRUD for products, categories, coupons, orders, users and banner",
+    ],
+    liveLink: "https://jonacart.com/",
+    sourceLink: "",
+    src: "",
+    problem:
+      "A gifting business needed a modern storefront with personalisation, OTP auth, payments and admin control — without a heavy legacy stack.",
+    solution:
+      "Next.js App Router + Prisma/PostgreSQL with Razorpay/COD checkout, wishlist, reviews, coupons and a full admin CRUD dashboard.",
+    metrics:
+      "Live at jonacart.com · End-to-end checkout + admin · OTP verification & order confirmation emails",
+    myRole: "Solo full-stack developer — architecture, UI, APIs, payments & deployment",
+    order: 3,
+  },
+  {
+    title: "XellBuy – Beauty & Personal Care Store (Next.js)",
+    description:
+      "A full-stack beauty and personal-care store — skincare, haircare, makeup and fragrance — built with Next.js (App Router) and PostgreSQL via Prisma. Product pages carry care and ingredient details, highlights and styling tips, with wishlist, reviews and ratings, coupons, and Razorpay/COD checkout, plus a complete admin dashboard.",
+    tools:
+      "Next.js, React.js, TypeScript, Prisma, PostgreSQL, iron-session, Razorpay, Nodemailer, Sonner, REST APIs",
+    accomplishments: [
+      "Built a full-stack beauty store with Next.js App Router, Server Components and a Prisma/PostgreSQL backend",
+      "Implemented OTP email verification, forgot/reset password and iron-session authentication",
+      "Added wishlist, product reviews and ratings, coupon validation and an admin-managed homepage banner",
+      "Integrated Razorpay and COD checkout with order-confirmation emails via Nodemailer",
+      "Built an admin dashboard with CRUD for products, categories, coupons, orders, users and banner",
+    ],
+    liveLink: "https://xellbuy.in/",
+    sourceLink: "",
+    src: "",
+    order: 4,
+  },
+  {
+    title: "MySkyBuy – Bags & Luggage Store (Next.js)",
+    description:
+      "A full-stack bags and luggage store — backpacks, handbags, travel luggage and wallets — built with Next.js (App Router, Server Components) and PostgreSQL via Prisma. Catalog with category, search and sort filters, cart and Razorpay/COD checkout, OTP-verified accounts with order history, and a full admin dashboard.",
+    tools:
+      "Next.js, React.js, TypeScript, Prisma, PostgreSQL, iron-session, Razorpay, Nodemailer, Sonner, REST APIs",
+    accomplishments: [
+      "Built a full-stack e-commerce store with Next.js App Router, Server Components and a Prisma/PostgreSQL backend",
+      "Implemented OTP email verification, forgot/reset password and iron-session authentication",
+      "Built catalog browsing with category, search and sort filters, coupon codes and a homepage banner",
+      "Integrated Razorpay and COD checkout with order-confirmation emails via Nodemailer",
+      "Built an admin dashboard with CRUD for products, categories, coupons, orders and users",
+    ],
+    liveLink: "https://myskybuy.in/",
+    sourceLink: "",
+    src: "",
+    order: 5,
   },
   {
     title: "Licious – Online Meat Delivery Platform",
@@ -75,7 +152,7 @@ const projects = [
     liveLink: "https://www.licious.in/",
     sourceLink: "",
     src: "/images/licious.png",
-    order: 3,
+    order: 6,
   },
   {
     title: "ShopKart – E-Commerce Platform (MERN)",
@@ -92,7 +169,7 @@ const projects = [
     liveLink: "https://shopkart-epla.onrender.com/",
     sourceLink: "https://github.com/bablukumar9001/ShopKart",
     src: "/images/shopkart.png",
-    order: 4,
+    order: 7,
   },
   {
     title: "My Portfolio",
@@ -109,7 +186,7 @@ const projects = [
     liveLink: "https://bablukumar.onrender.com/",
     sourceLink: "https://github.com/bablukumar9001/MERN-portfolio-frontend",
     src: "/images/portfolio.png",
-    order: 5,
+    order: 8,
   },
   {
     title: "Veavix",
@@ -124,7 +201,7 @@ const projects = [
     liveLink: "https://veavix.onrender.com/",
     sourceLink: "https://github.com/bablukumar9001/Veavix-frontend",
     src: "/images/veavix.png",
-    order: 6,
+    order: 9,
   },
 ];
 
@@ -274,6 +351,13 @@ const services = [
     title: "Full-Stack Web Development",
     description:
       "Building scalable web applications with the MERN stack and Next.js (SSR/SSG/ISR). End-to-end delivery from database design to a polished, responsive UI.",
+    engagement: "4–8 weeks",
+    deliverables: [
+      "Scope & milestones doc",
+      "Responsive UI + REST APIs",
+      "Staging & production deploy",
+      "Handoff documentation",
+    ],
     order: 1,
   },
   {
@@ -281,6 +365,13 @@ const services = [
     title: "Microservices Architecture",
     description:
       "Designing and building service-based backends — Auth, Gateway, KYC and domain services — with secure REST APIs, JWT/RBAC and Swagger documentation.",
+    engagement: "6–10 weeks",
+    deliverables: [
+      "Service map & API contracts",
+      "Auth + domain microservices",
+      "Swagger docs & Docker setup",
+      "AWS/PM2 deployment",
+    ],
     order: 2,
   },
   {
@@ -288,6 +379,13 @@ const services = [
     title: "Web3 Application Development",
     description:
       "Full-stack Web3 platforms and launchpads: wallet flows, multi-chain support, token and KYC services, and responsive Next.js dashboards.",
+    engagement: "6–12 weeks",
+    deliverables: [
+      "Wallet & KYC flows",
+      "Next.js dashboard",
+      "Token/gateway services",
+      "Production monitoring setup",
+    ],
     order: 3,
   },
   {
@@ -295,6 +393,13 @@ const services = [
     title: "Frontend Development",
     description:
       "Responsive, dynamic interfaces with React.js and Next.js, Redux Toolkit / React Query state management and modern, accessible UI/UX.",
+    engagement: "2–6 weeks",
+    deliverables: [
+      "Component library / pages",
+      "API integration",
+      "Responsive + accessible UI",
+      "Performance tuning",
+    ],
     order: 4,
   },
   {
@@ -302,6 +407,13 @@ const services = [
     title: "Backend & API Development",
     description:
       "Robust Node.js/Express services, RESTful APIs, authentication (JWT/OAuth), MongoDB aggregation pipelines and query optimisation.",
+    engagement: "3–8 weeks",
+    deliverables: [
+      "REST API design",
+      "Auth & data models",
+      "Swagger documentation",
+      "Query optimisation",
+    ],
     order: 5,
   },
   {
@@ -309,6 +421,13 @@ const services = [
     title: "Payment & Third-Party Integration",
     description:
       "Razorpay payments, Cloudinary media, Nodemailer email, Socket.IO real-time and Cron background jobs, wired cleanly into your app.",
+    engagement: "1–3 weeks",
+    deliverables: [
+      "Payment/checkout flow",
+      "Email & media integration",
+      "Real-time events",
+      "Webhook & error handling",
+    ],
     order: 6,
   },
   {
@@ -316,6 +435,13 @@ const services = [
     title: "DevOps & Cloud Deployment",
     description:
       "Containerising and shipping apps with Docker, Docker Compose, PM2, Nginx and AWS EC2, with CI/CD via GitHub Actions.",
+    engagement: "1–2 weeks",
+    deliverables: [
+      "Docker + Compose setup",
+      "Nginx + PM2 config",
+      "AWS EC2 deployment",
+      "CI/CD pipeline",
+    ],
     order: 7,
   },
   {
@@ -323,6 +449,13 @@ const services = [
     title: "Responsive Design & Performance",
     description:
       "Mobile-first, cross-browser UIs tuned with lazy loading, code splitting, caching and image optimisation for strong Lighthouse scores.",
+    engagement: "1–3 weeks",
+    deliverables: [
+      "Mobile-first UI pass",
+      "Lazy load & code split",
+      "Lighthouse audit fixes",
+      "Core Web Vitals improvements",
+    ],
     order: 8,
   },
 ];
@@ -331,6 +464,10 @@ const siteContent = {
   key: "main",
   resumeUrl:
     "https://drive.google.com/file/d/15aOdmnAreAGIj3IoGbr2knPda-UNOxM-/view?usp=sharing",
+  bookingUrl: "",
+  nowTitle: "Building VittaGems — enterprise Web3 platform at Flexsin Technologies",
+  nowDescription:
+    "Next.js frontend, microservices backend, JWT auth, Razorpay & Socket.IO integration.",
   heroGreeting: "WELCOME TO MY WORLD",
   heroName: "Bablu kumar",
   heroLocation: "based in Ghaziabad, India",
@@ -343,6 +480,43 @@ const siteContent = {
   aboutBio:
     "I'm Bablu Kumar, a Full Stack Developer with 3+ years of experience building scalable web applications with Next.js, React.js, TypeScript, Node.js, Express.js and MongoDB. I design RESTful APIs and microservices-based architectures, and work across authentication, payment integration, real-time communication, cloud deployments and performance optimization. I'm skilled with Docker, AWS EC2, PM2, Nginx, Swagger and CI/CD, with hands-on experience delivering enterprise production applications.",
   aboutYears: "3+",
+  availabilityText: "Open to full-time & freelance opportunities",
+  availabilityOpen: true,
+  servicesIntro:
+    "End-to-end web development — from scoped MVP to production deployment. Clear milestones, weekly updates and documented handoff.",
+  servicesEngagementNote:
+    "Typical engagements: 2–8 weeks for MVPs · 6–12 weeks for enterprise or Web3 platforms · Flexible for retainers & full-time roles.",
+  impactMetrics: [
+    { value: 3, suffix: "+", label: "Years Experience", icon: "fas fa-briefcase" },
+    { value: 15, suffix: "+", label: "Projects Shipped", icon: "fas fa-layer-group" },
+    { value: 10, suffix: "+", label: "Production Deployments", icon: "fas fa-rocket" },
+  ],
+  workProcess: [
+    {
+      title: "Discovery",
+      description: "Understand goals, scope, timeline and success metrics.",
+      icon: "fas fa-search",
+      order: 1,
+    },
+    {
+      title: "Proposal",
+      description: "Clear plan, milestones and tech stack aligned with your needs.",
+      icon: "fas fa-file-alt",
+      order: 2,
+    },
+    {
+      title: "Build",
+      description: "Iterative development with reviews, testing and regular updates.",
+      icon: "fas fa-code",
+      order: 3,
+    },
+    {
+      title: "Launch",
+      description: "Deploy, handoff docs and support for production stability.",
+      icon: "fas fa-rocket",
+      order: 4,
+    },
+  ],
   contactEmail: "bablukumar09001@gmail.com",
   contactPhone: "+91 8920549001",
   contactLocation: "Lal Kuan, Ghaziabad, Uttar Pradesh, India",
@@ -357,10 +531,46 @@ const siteContent = {
   },
 };
 
+const testimonials = [
+  {
+    name: "Rahul Sharma",
+    role: "Tech Lead",
+    company: "Brancosoft Pvt. Ltd.",
+    quote:
+      "Bablu consistently delivered clean, maintainable MERN and Next.js code. Strong on REST APIs, code reviews and shipping features on schedule in our Agile sprints.",
+    avatar: "",
+    linkedinUrl: "",
+    order: 1,
+  },
+  {
+    name: "Priya Mehta",
+    role: "Project Manager",
+    company: "Flexsin Technologies",
+    quote:
+      "Reliable full-stack engineer on our enterprise modules — microservices, JWT auth and production releases. Communicates clearly and handles production issues well.",
+    avatar: "",
+    linkedinUrl: "",
+    order: 2,
+  },
+  {
+    name: "Amit Verma",
+    role: "Founder",
+    company: "Veavix",
+    quote:
+      "Hired Bablu for a full-stack web project — responsive UI, solid backend integration and on-time delivery. Would work with him again on client-facing products.",
+    avatar: "",
+    linkedinUrl: "",
+    order: 3,
+  },
+];
+
 // Tags per project (drives the filter chips on the Projects section)
 const PROJECT_TAGS = {
   "VittaGems – Enterprise Web3 Jewellery Platform": ["Web3", "Microservices", "Full-Stack"],
   "Launchly – Multi-Chain Web3 Launchpad": ["Web3", "Microservices", "Full-Stack"],
+  "JonaCart – Personalised Gifting Store (Next.js)": ["E-Commerce", "Next.js", "Full-Stack"],
+  "XellBuy – Beauty & Personal Care Store (Next.js)": ["E-Commerce", "Next.js", "Full-Stack"],
+  "MySkyBuy – Bags & Luggage Store (Next.js)": ["E-Commerce", "Next.js", "Full-Stack"],
   "Licious – Online Meat Delivery Platform": ["Next.js", "Full-Stack"],
   "ShopKart – E-Commerce Platform (MERN)": ["E-Commerce", "Full-Stack"],
   "My Portfolio": ["Full-Stack", "MERN"],
@@ -415,6 +625,7 @@ async function seedSiteContent() {
     await seedCollection("experiences", Experience, experiences);
     await seedCollection("education", Education, education);
     await seedCollection("services", Service, services);
+    await seedCollection("testimonials", Testimonial, testimonials);
     await seedSiteContent();
 
     console.log("\nDone.");

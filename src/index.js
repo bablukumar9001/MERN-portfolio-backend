@@ -11,6 +11,7 @@ const Service = require("./model/service");
 const SiteContent = require("./model/siteContent");
 const Image = require("./model/image");
 const Certification = require("./model/certification");
+const Testimonial = require("./model/testimonial");
 const AnalyticsEvent = require("./model/analyticsEvent");
 const cors = require("cors");
 const createRateLimiter = require("./middleware/rateLimit");
@@ -38,6 +39,18 @@ app.get("/api/images/:id", async (req, res) => {
     if (!img) return res.status(404).end();
     res.set("Content-Type", img.contentType);
     res.set("Cache-Control", "public, max-age=31536000, immutable");
+    if (img.contentType === "application/pdf") {
+      const name =
+        img.filename && /\.pdf$/i.test(img.filename) ? img.filename : "Resume.pdf";
+      res.set("Content-Disposition", `attachment; filename="${name}"`);
+    } else if (
+      img.contentType ===
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    ) {
+      const name =
+        img.filename && /\.docx$/i.test(img.filename) ? img.filename : "Resume.docx";
+      res.set("Content-Disposition", `attachment; filename="${name}"`);
+    }
     res.send(img.data);
   } catch (err) {
     res.status(400).end();
@@ -102,6 +115,15 @@ app.get("/api/site-content", async (req, res) => {
 app.get("/api/certifications", async (req, res) => {
   try {
     const items = await Certification.find().sort({ order: 1, createdAt: -1 });
+    res.json(items);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.get("/api/testimonials", async (req, res) => {
+  try {
+    const items = await Testimonial.find().sort({ order: 1, createdAt: -1 });
     res.json(items);
   } catch (err) {
     res.status(500).json({ error: err.message });

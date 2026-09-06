@@ -9,6 +9,13 @@ const siteContentSchema = new mongoose.Schema(
     // Resume / CV
     resumeUrl: { type: String, default: "" },
 
+    // Booking / scheduling (Calendly, Google Calendar, etc.)
+    bookingUrl: { type: String, default: "" },
+
+    // "Now" strip — what you're currently working on
+    nowTitle: { type: String, default: "" },
+    nowDescription: { type: String, default: "" },
+
     // Home hero
     heroGreeting: { type: String, default: "WELCOME TO MY WORLD" },
     heroName: { type: String, default: "" },
@@ -19,10 +26,44 @@ const siteContentSchema = new mongoose.Schema(
     aboutBio: { type: String, default: "" },
     aboutYears: { type: String, default: "2+" },
 
+    // Availability badge (hero, about, contact)
+    availabilityText: { type: String, default: "Open to opportunities" },
+    availabilityOpen: { type: Boolean, default: true },
+
+    // Animated impact counters
+    impactMetrics: {
+      type: [
+        {
+          value: { type: Number, default: 0 },
+          suffix: { type: String, default: "" },
+          label: { type: String, default: "" },
+          icon: { type: String, default: "fas fa-chart-line" },
+        },
+      ],
+      default: [],
+    },
+
+    // Freelance / delivery process steps
+    workProcess: {
+      type: [
+        {
+          title: { type: String, default: "" },
+          description: { type: String, default: "" },
+          icon: { type: String, default: "fas fa-circle" },
+          order: { type: Number, default: 0 },
+        },
+      ],
+      default: [],
+    },
+
     // Contact block
     contactEmail: { type: String, default: "" },
     contactPhone: { type: String, default: "" },
     contactLocation: { type: String, default: "" },
+
+    // Services section copy
+    servicesIntro: { type: String, default: "" },
+    servicesEngagementNote: { type: String, default: "" },
 
     // Footer
     footerText: { type: String, default: "" },
